@@ -17,7 +17,7 @@ const ContributeForm = ({ address }) => {
     const [errorMessage, setErrorMessage] = useState("");
     const [buttonSpinner, setButtonSpinner] = useState(false);
 
-    const router = useRouter();
+    const router = useRouter(); // Get the router object for navigation
 
     // Function to handle the form submission
     async function handleSubmit(event) {

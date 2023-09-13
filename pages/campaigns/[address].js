@@ -8,9 +8,10 @@ import React from "react";
 import { useRouter } from "next/router";
 import Layout from "../../components/Layout";
 import Campaign from "../../frontend_scripts/campaign";
-import { Card, Grid } from 'semantic-ui-react';
+import { Card, Grid, Button } from 'semantic-ui-react';
 import { ethers } from "ethers";
 import ContributeForm from "../../components/ContributeForm";
+import Link from 'next/link';
 
 const CampaignShow = ({ address, minimumContribution, contractBalance, numberOfRequests, approversCount, manager }) => {
 
@@ -55,12 +56,21 @@ const CampaignShow = ({ address, minimumContribution, contractBalance, numberOfR
         <Layout>
             <h3>Campaign Details</h3>
             <Grid>
-                <Grid.Column width={11}>
-                    {displayCampaignSummary()}
-                </Grid.Column>
-                <Grid.Column width={3}>
-                    <ContributeForm address={address}></ContributeForm>
-                </Grid.Column>
+                <Grid.Row>
+                    <Grid.Column width={11}>
+                        {displayCampaignSummary()}
+                    </Grid.Column>
+                    <Grid.Column width={3}>
+                        <ContributeForm address={address}></ContributeForm>
+                    </Grid.Column>
+                </Grid.Row>
+                <Grid.Row>
+                    <Grid.Column>
+                        <Link href={`/campaigns/${address}/requests/allrequests`}>
+                            <Button color="purple" size="large">View Requests</Button>
+                        </Link>
+                    </Grid.Column>
+                </Grid.Row>
             </Grid>
         </Layout>
     )
@@ -72,6 +82,8 @@ export async function getServerSideProps(context) {
     const { address } = context.query; // Get the campaign address from the URL
     const campaign = Campaign(address); // Create an instance of the campaign contract
     const summary = await campaign.getSummary(); // Call the contract method to get campaign summary
+
+    // console.log(summary)
 
     // Return the campaign details as props to be used in the component
     return {
