@@ -24,27 +24,32 @@ const CampaignShow = ({ address, minimumContribution, contractBalance, numberOfR
                 header: manager,
                 meta: 'Address Of Manager',
                 description: 'The Manager created this campaign and can create requests to withdraw money.',
-                style: { overflowWrap: 'break-word' }
+                style: { overflowWrap: 'break-word' },
+                color: "purple"
             },
             {
                 header: minimumContribution,
                 meta: 'Minimum Contribution in WEI',
-                description: 'The amount of WEI to donate to become contributor/approver.',
+                description: 'The amount of WEI to donate to become contributor.',
+                color: "purple"
             },
             {
                 header: numberOfRequests,
                 meta: 'Number of Requests',
-                description: 'A request tries to withdraw money from the contract. Request must be approved by contributors/approvers',
+                description: 'A request tries to withdraw money from the contract. Request must be approved by contributors.',
+                color: "purple"
             },
             {
                 header: approversCount,
-                meta: 'Number of Approvers',
+                meta: 'Number of Contributors',
                 description: 'Number of people who have already donated to this campaign.',
+                color: "purple"
             },
             {
                 header: ethers.utils.formatEther(contractBalance),
                 meta: 'Campaign Balance in ETH',
                 description: 'The balance is how much money this campaign has to spend.',
+                color: "purple"
             }
         ]
 

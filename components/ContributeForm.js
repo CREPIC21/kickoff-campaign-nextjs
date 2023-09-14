@@ -45,7 +45,18 @@ const ContributeForm = ({ address }) => {
             await router.replace(`/campaigns/${address}`);
         } catch (error) {
             console.log(error)
-            setErrorMessage(error.message) // Set an error message if there's an issue
+            if ((error.message).includes('invalid decimal value')) {
+                setErrorMessage('Invalid decimal value.')
+            }
+            else if ((error.message).includes('user rejected transaction')) {
+                setErrorMessage('User rejected transaction.')
+            }
+            else if ((error.message).includes('insufficient funds')) {
+                setErrorMessage('Insufficient funds.')
+            }
+            else {
+                setErrorMessage(error.message) // Set an error message if there's an issue
+            }
         }
         setButtonSpinner(false); // Deactivate the loading spinner on the button
         setDonation(""); // Clear the donation input field after submission
@@ -75,7 +86,7 @@ const ContributeForm = ({ address }) => {
                     value={donation}
                     onChange={event => setDonation(event.target.value)} />
             </Form.Field>
-            <Message error header="Opps!" content={errorMessage}></Message>
+            <Message error header="Something went wrong:" content={errorMessage}></Message>
             <Button type='submit' color="purple" loading={buttonSpinner}>Donate</Button>
         </Form>
     )

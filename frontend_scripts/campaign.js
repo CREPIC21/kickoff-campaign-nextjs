@@ -35,6 +35,11 @@ const abi = [
     },
     {
         "inputs": [],
+        "name": "Campaign__ManagerCanNotApproveRequest",
+        "type": "error"
+    },
+    {
+        "inputs": [],
         "name": "Campaign__ManagerDidNotCallThisFunction",
         "type": "error"
     },

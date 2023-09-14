@@ -7,28 +7,62 @@ There is also a button for creating a new request which will redirect user to th
 // Import necessary modules and components
 import { React } from "react";
 import Layout from "../../../../components/Layout";
-import { Button, Icon } from 'semantic-ui-react';
+import { Button, Icon, Table } from 'semantic-ui-react';
 import Link from 'next/link';
 import Campaign from "../../../../frontend_scripts/campaign";
+import RequestRow from "../../../../components/RequestRow";
 
-const ShowRequests = ({ address, requestsCount, requests }) => {
+const ShowRequests = ({ address, requestsCount, requests, numberOfContributors }) => {
 
     // console.log(address)
     // console.log(requestsCount)
     // console.log(requests)
+
+    // Function to display requests in a table on the UI
+    function displayRequests() {
+
+        // Looping through the campaigns array to create request rows
+        return requests.map((request, index) => {
+            return <RequestRow
+                key={index}
+                id={index}
+                request={request}
+                address={address}
+                numberOfContributors={numberOfContributors}
+            ></RequestRow>
+
+        });
+    }
 
     // Render the main component
     return (
         <Layout>
             <h3>Requests</h3>
             <Link href={`/campaigns/${address}/requests/new`}>
-                <Button floated="right" animated color="purple">
+                <Button floated="right" animated color="purple" style={{ marginBottom: 10 }}>
                     <Button.Content visible>Create Request</Button.Content>
                     <Button.Content hidden>
                         <Icon name='add circle' />
                     </Button.Content>
                 </Button>
             </Link>
+            <Table celled>
+                <Table.Header>
+                    <Table.Row>
+                        <Table.HeaderCell>ID</Table.HeaderCell>
+                        <Table.HeaderCell>Description</Table.HeaderCell>
+                        <Table.HeaderCell>Amountin ETH</Table.HeaderCell>
+                        <Table.HeaderCell>Recipient Address</Table.HeaderCell>
+                        <Table.HeaderCell>Number of Approvals</Table.HeaderCell>
+                        <Table.HeaderCell>Approve</Table.HeaderCell>
+                        <Table.HeaderCell>Finalize</Table.HeaderCell>
+                    </Table.Row>
+                </Table.Header>
+                <Table.Body>
+                    {displayRequests()}
+                </Table.Body>
+            </Table>
+            <div>Found {requestsCount} requests.</div>
         </Layout>
     )
 }
@@ -58,21 +92,21 @@ export async function getServerSideProps(context) {
             requests.push(modifiedRequest); // Push the valid request to the array
         }
 
+        const numberOfContributors = await campaign.getApproversCount();
+        // console.log(numberOfContributors)
+
         // Return the address, requestCount and requests array as props to be used in the component
         return {
             props: {
                 address: address,
                 requestsCount: requestsCount.toString(),
-                requests: requests
+                requests: requests,
+                numberOfContributors: numberOfContributors.toString()
             }
         };
     } catch (error) {
         console.error('Error fetching requests:', error);
     }
-
-
-
-
 }
 
 export default ShowRequests;

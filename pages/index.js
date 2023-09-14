@@ -26,8 +26,9 @@ export default function CampaingIndex({ campaigns }) {
                 header: address, // Set the header of the Card to the campaign address
                 description: (
                     <Link href={`/campaigns/${address}`}
-                    >View Campaign</Link>), // Create a link to view the campaign
-                fluid: true // Make the Card fluid to take up the width of its container
+                    ><Button size="mini" basic color="purple" style={{ marginTop: 10 }}>View Campaign</Button></Link>), // Create a link to view the campaign
+                fluid: true, // Make the Card fluid to take up the width of its container
+                color: "purple"
             }
         });
 
