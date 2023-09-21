@@ -1,7 +1,7 @@
 import { React, useState } from "react";
 import { Table, Button, Message } from 'semantic-ui-react';
 import { ethers } from "ethers";
-import Campaign from "../frontend_scripts/campaignSigner";
+import Campaign from "../frontend_scripts/campaign";
 import { useRouter } from "next/router";
 
 const RequestRow = (props) => {

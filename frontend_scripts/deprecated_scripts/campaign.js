@@ -296,18 +296,10 @@ const abi = [
     }
 ]
 
-export default (address, signer = null) => {
-    let contract;
-    if (signer == null) {
-        // Initialize an Ethereum provider using ethers, connecting to Infura
-        const provider = new ethers.providers.JsonRpcProvider(process.env.SEPOLIA_RPC_URL_INFURA);
-        // Create an instance of your contract using its ABI and contract address
-        contract = new ethers.Contract(address, abi, provider);
-    } else {
-        // Create an instance of your contract using its ABI and contract address
-        contract = new ethers.Contract(address, abi, signer);
-    }
+export default (address) => {
+    // Initialize an Ethereum provider using ethers, connecting to Infura
+    const provider = new ethers.providers.JsonRpcProvider(process.env.SEPOLIA_RPC_URL_INFURA);
+    // Create an instance of your contract using its ABI and contract address
+    const contract = new ethers.Contract(address, abi, provider);
     return contract;
-
 };
-

@@ -6,7 +6,7 @@ It interacts with an Ethereum smart contract using ethers and provides user-frie
 // Import necessary modules and components
 import { React, useState } from "react";
 import { Button, Form, Input, Message } from 'semantic-ui-react';
-import Campaign from "../frontend_scripts/campaignSigner";
+import Campaign from "../frontend_scripts/campaign";
 import { ethers } from "ethers";
 import { useRouter } from "next/router";
 
