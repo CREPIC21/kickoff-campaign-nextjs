@@ -35,6 +35,11 @@ const abi = [
     },
     {
         "inputs": [],
+        "name": "Campaign__FunctionCalledWithInvalidParameters",
+        "type": "error"
+    },
+    {
+        "inputs": [],
         "name": "Campaign__ManagerCanNotApproveRequest",
         "type": "error"
     },
@@ -46,6 +51,16 @@ const abi = [
     {
         "inputs": [],
         "name": "Campaign__NotEnoughEthSent",
+        "type": "error"
+    },
+    {
+        "inputs": [],
+        "name": "Campaign__RequestCanNotBeCreatedAsContractDoesNotHaveEnoughBalanceForRequestValue",
+        "type": "error"
+    },
+    {
+        "inputs": [],
+        "name": "Campaign__RequestCanNotBeFinalizedAsContractDoesNotHaveEnoughBalance",
         "type": "error"
     },
     {

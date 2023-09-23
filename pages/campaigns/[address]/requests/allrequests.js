@@ -51,7 +51,7 @@ const ShowRequests = ({ address, requestsCount, requests, numberOfContributors }
                     <Table.Row>
                         <Table.HeaderCell>ID</Table.HeaderCell>
                         <Table.HeaderCell>Description</Table.HeaderCell>
-                        <Table.HeaderCell>Amountin ETH</Table.HeaderCell>
+                        <Table.HeaderCell>Amount in ETH</Table.HeaderCell>
                         <Table.HeaderCell>Recipient Address</Table.HeaderCell>
                         <Table.HeaderCell>Number of Approvals</Table.HeaderCell>
                         <Table.HeaderCell>Approve</Table.HeaderCell>

@@ -27,9 +27,3 @@ const Header = () => {
 }
 
 export default Header;
-
-<Popup>
-    trigger={<Link href="/campaigns/new"><Menu.Item>+</Menu.Item></Link>}
-    content="Create new campaign."
-    on="hover"
-</Popup>

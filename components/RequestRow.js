@@ -1,8 +1,9 @@
 import { React, useState } from "react";
-import { Table, Button, Message } from 'semantic-ui-react';
+import { Table, Button, Message, Progress } from 'semantic-ui-react';
 import { ethers } from "ethers";
 import Campaign from "../frontend_scripts/campaign";
 import { useRouter } from "next/router";
+import Link from 'next/link';
 
 const RequestRow = (props) => {
 
@@ -90,8 +91,14 @@ const RequestRow = (props) => {
             <Table.Cell>{props.id}</Table.Cell>
             <Table.Cell>{requestDescription}</Table.Cell>
             <Table.Cell>{ethers.utils.formatEther(requestValue)}</Table.Cell>
-            <Table.Cell>{requestRecipient}</Table.Cell>
-            <Table.Cell>{approvalCount}/{numberOfContributors}</Table.Cell>
+            <Table.Cell>
+                {requestRecipient}
+                <Link href={`https://sepolia.etherscan.io/address/${requestRecipient}`} target="_blank"
+                ><Button size="mini" basic color="purple" style={{ marginTop: 10 }}>View Service Contract on Etherscan</Button></Link>
+            </Table.Cell>
+            <Table.Cell textAlign="center">
+                <Progress value={approvalCount} total={numberOfContributors} indicating size="tiny" />
+                {approvalCount}/{numberOfContributors}</Table.Cell>
             <Table.Cell>
                 {/* {complete ? null : (
                     <Button basic color="green" onClick={onApprove}>Approve</Button>
