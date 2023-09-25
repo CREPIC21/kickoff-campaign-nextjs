@@ -13,7 +13,7 @@ import Campaign from "../../../../frontend_scripts/campaign";
 import { useRouter } from "next/router";
 import Link from "next/link";
 
-const NewRequests = ({ address }) => {
+const NewRequests = ({ address, onFormSubmit }) => {
 
     // State variables to manage user input and error messages
     const [description, setDescription] = useState("");
@@ -44,6 +44,11 @@ const NewRequests = ({ address }) => {
 
             // Listen for the transaction to be mined and resolved
             await listenForTransactionMine(transactionResponse, campaign.provider)
+
+
+            // Notify the parent component (ShowRequests) that the form is successfully submitted
+            onFormSubmit(true);
+
             // Redirect to the campaign all requests details page after a successful contribution
             await router.replace(`/campaigns/${address}/requests/allrequests`);
         } catch (error) {
@@ -71,38 +76,38 @@ const NewRequests = ({ address }) => {
 
     // Render the main component
     return (
-        <Layout>
-            <Link href={`/campaigns/${address}/requests/allrequests`}>Back</Link>
-            <h3>New Request</h3>
-            <Form onSubmit={handleSubmit} error={!!errorMessage} > {/* exclamation is just a little trick to turn a string into its equivalent, in this case empty string equals false */}
-                <Form.Field>
-                    <label>Create a Request Description</label>
-                    <Input
-                        label='Description'
-                        labelPosition='right'
-                        value={description}
-                        onChange={event => setDescription(event.target.value)} />
-                </Form.Field>
-                <Form.Field>
-                    <label>Amount in ETH</label>
-                    <Input
-                        label='ETH'
-                        labelPosition='right'
-                        value={amount}
-                        onChange={event => setAmount(event.target.value)} />
-                </Form.Field>
-                <Form.Field>
-                    <label>Recipient Address</label>
-                    <Input
-                        label='Address'
-                        labelPosition='right'
-                        value={recipientAddress}
-                        onChange={event => setRecipientAddress(event.target.value)} />
-                </Form.Field>
-                <Message error header="Opps!" content={errorMessage}></Message>
-                <Button type='submit' color="purple" loading={buttonSpinner}>Create</Button>
-            </Form>
-        </Layout>
+        // <Layout>
+        //     <Link href={`/campaigns/${address}/requests/allrequests`}>Back</Link>
+        //     <h3>New Request</h3>
+        <Form style={{ marginTop: 15 }} onSubmit={handleSubmit} error={!!errorMessage} > {/* exclamation is just a little trick to turn a string into its equivalent, in this case empty string equals false */}
+            <Form.Field>
+                <label>Request Description</label>
+                <Input
+                    label='Description'
+                    labelPosition='right'
+                    value={description}
+                    onChange={event => setDescription(event.target.value)} />
+            </Form.Field>
+            <Form.Field>
+                <label>Amount in ETH</label>
+                <Input
+                    label='ETH'
+                    labelPosition='right'
+                    value={amount}
+                    onChange={event => setAmount(event.target.value)} />
+            </Form.Field>
+            <Form.Field>
+                <label>Recipient Address</label>
+                <Input
+                    label='Address'
+                    labelPosition='right'
+                    value={recipientAddress}
+                    onChange={event => setRecipientAddress(event.target.value)} />
+            </Form.Field>
+            <Message error header="Opps!" content={errorMessage}></Message>
+            <Button type='submit' color="green" loading={buttonSpinner}>Create</Button>
+        </Form>
+        // </Layout>
     )
 }
 

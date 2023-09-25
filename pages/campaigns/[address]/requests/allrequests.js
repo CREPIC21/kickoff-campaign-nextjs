@@ -5,14 +5,34 @@ There is also a button for creating a new request which will redirect user to th
 */
 
 // Import necessary modules and components
-import { React } from "react";
+import { React, useState, useEffect } from "react";
 import Layout from "../../../../components/Layout";
 import { Button, Icon, Table } from 'semantic-ui-react';
 import Link from 'next/link';
 import Campaign from "../../../../frontend_scripts/campaign";
 import RequestRow from "../../../../components/RequestRow";
+import NewRequests from "./new";
 
 const ShowRequests = ({ address, requestsCount, requests, numberOfContributors }) => {
+
+    const [showForm, setShowForm] = useState(false); // State variable to track if the form is displayed
+    const [initialRequestCount, setInitialRequestCount] = useState(3); // State variable to track the number of requests to display initially
+    const [showAll, setShowAll] = useState(false); // State variable to track whether to show all requests
+
+    // Function to toggle the display of the form
+    const toggleForm = () => {
+        if (showForm) {
+            setShowForm(false);
+        } else {
+            setShowForm(true);
+        }
+
+    };
+
+    // Callback function to update the showForm state when the form is submitted
+    const handleFormSubmit = (formSubmitted) => {
+        setShowForm(!formSubmitted);
+    };
 
     // console.log(address)
     // console.log(requestsCount)
@@ -20,32 +40,52 @@ const ShowRequests = ({ address, requestsCount, requests, numberOfContributors }
 
     // Function to display requests in a table on the UI
     function displayRequests() {
+        if (showAll) {
+            // Display all requests
+            return requests.map((request, index) => (
+                <RequestRow
+                    key={index}
+                    id={index}
+                    request={request}
+                    address={address}
+                    numberOfContributors={numberOfContributors}
+                ></RequestRow>
+            ));
+        } else {
+            // Limit the number of requests to display based on initialRequestCount
+            const displayedRequests = requests.slice(0, initialRequestCount);
 
-        // Looping through the campaigns array to create request rows
-        return requests.map((request, index) => {
-            return <RequestRow
-                key={index}
-                id={index}
-                request={request}
-                address={address}
-                numberOfContributors={numberOfContributors}
-            ></RequestRow>
+            // Looping through the campaigns array to create request rows
+            return displayedRequests.map((request, index) => {
+                return <RequestRow
+                    key={index}
+                    id={index}
+                    request={request}
+                    address={address}
+                    numberOfContributors={numberOfContributors}
+                ></RequestRow>
 
-        });
+
+            });
+        }
     }
+
+    // Function to toggle between showing all requests and initial requests
+    const toggleShowAll = () => {
+        setShowAll(!showAll);
+        if (!showAll) {
+            // When switching to show all, set initialRequestCount to the total number of requests
+            setInitialRequestCount(requests.length);
+        } else {
+            // When switching to show initial requests, set initialRequestCount back to 4
+            setInitialRequestCount(3);
+        }
+    };
 
     // Render the main component
     return (
         <Layout>
             <h3>Requests</h3>
-            <Link href={`/campaigns/${address}/requests/new`}>
-                <Button floated="right" animated color="purple" style={{ marginBottom: 10 }}>
-                    <Button.Content visible>Create Request</Button.Content>
-                    <Button.Content hidden>
-                        <Icon name='add circle' />
-                    </Button.Content>
-                </Button>
-            </Link>
             <Table celled>
                 <Table.Header>
                     <Table.Row>
@@ -62,7 +102,19 @@ const ShowRequests = ({ address, requestsCount, requests, numberOfContributors }
                     {displayRequests()}
                 </Table.Body>
             </Table>
-            <div>Found {requestsCount} requests.</div>
+            <div style={{ marginBottom: 15 }}>Displaying {showAll ? requestsCount : initialRequestCount} out of {requestsCount} requests.</div>
+            {/* Toggle between showing all requests and initial requests */}
+            <Button onClick={toggleShowAll}>
+                {showAll ? 'Show limited requests' : 'Show All Requests'}
+            </Button>
+            <br></br>
+            {/* Display the form if showForm is true */}
+            {showForm && <NewRequests address={address} onFormSubmit={handleFormSubmit} />}
+            <br></br>
+            <Button style={{ marginBottom: 15 }} floated="left" color={showForm ? "red" : "green"} onClick={toggleForm}>
+                {/* {showForm ? 'Cancel Request' : 'Create Request'} */}
+                <Button.Content>{showForm ? 'Cancel Request' : 'Create New Request'}</Button.Content>
+            </Button>
         </Layout>
     )
 }

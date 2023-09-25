@@ -6,7 +6,7 @@ It also contains the button for creating a new campaign, which when clicked redi
 */
 
 // Import necessary modules and components
-import React from "react";
+import { React, useState } from "react";
 import { Card } from 'semantic-ui-react';
 import { Button, Icon } from 'semantic-ui-react';
 import Layout from "../components/Layout";
@@ -14,8 +14,27 @@ import { ethers } from 'ethers';
 import { abi, contractAddress } from "../frontend_scripts/factory";
 import Link from 'next/link';
 import { useRouter } from "next/router";
+import New from "./campaigns/new";
 
 export default function CampaingIndex({ campaigns }) {
+
+    const [showForm, setShowForm] = useState(false); // State variable to track if the form is displayed
+
+
+    // Callback function to update the showForm state when the form is submitted
+    const handleFormSubmit = (formSubmitted) => {
+        setShowForm(!formSubmitted);
+    };
+
+    // Function to toggle the display of the form
+    const toggleForm = () => {
+        if (showForm) {
+            setShowForm(false);
+        } else {
+            setShowForm(true);
+        }
+
+    };
 
     // Function to display campaigns as cards on the UI
     function displayCampaigns() {
@@ -32,7 +51,7 @@ export default function CampaingIndex({ campaigns }) {
             }
         });
 
-        return <Card.Group items={items}></Card.Group> // Render the Card.Group with the created Card items
+        return <Card.Group style={{ marginBottom: 10 }} items={items}></Card.Group> // Render the Card.Group with the created Card items
 
     }
 
@@ -41,15 +60,17 @@ export default function CampaingIndex({ campaigns }) {
         <Layout>
             <div>
                 <h3>Open campaings</h3>
-                <Link href="/campaigns/new">
-                    <Button floated="right" animated color="purple">
-                        <Button.Content visible>Create Campaign</Button.Content>
-                        <Button.Content hidden>
-                            <Icon name='add circle' />
-                        </Button.Content>
-                    </Button>
-                </Link>
+                {/* <Button floated="right" color={showForm ? "red" : "green"} onClick={toggleForm}>
+                <Button.Content>{showForm ? 'Cancel Request' : 'Create New Request'}</Button.Content>
+            </Button>
+            <br></br>
+            <br></br>
+            {showForm && <NewRequests address={address} onFormSubmit={handleFormSubmit} />} */}
                 {displayCampaigns()} {/* Render the Card.Group containing campaign cards */}
+                {showForm && <New onFormSubmit={handleFormSubmit} />}
+                <Button floated="left" color={showForm ? "red" : "green"} onClick={toggleForm}>
+                    <Button.Content>{showForm ? 'Close The Form' : 'Create New Campaign'}</Button.Content>
+                </Button>
             </div>
         </Layout>
     );

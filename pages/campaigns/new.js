@@ -11,8 +11,9 @@ import { Button, Form, Input, Message } from 'semantic-ui-react';
 import { ethers } from 'ethers';
 import { abi, contractAddress } from "../../frontend_scripts/factory";
 import { useRouter } from "next/router";
+import Link from 'next/link';
 
-const New = () => {
+const New = ({ onFormSubmit }) => {
 
     // State variables to manage user input and error messages
     const [minimumContribution, setMinimumContribution] = useState("");
@@ -40,6 +41,10 @@ const New = () => {
 
             // Listen for the transaction to be mined and resolved
             await listenForTransactionMine(transactionResponse, provider)
+
+            // Notify the parent component (ShowRequests) that the form is successfully submitted
+            onFormSubmit(true);
+
             router.push("/"); // Redirect to the home page after successful contract creation
         } catch (error) {
             console.log(error)
@@ -63,10 +68,9 @@ const New = () => {
 
     // Render the component
     return (
-        <Layout>
+        <div>
             <h3>Create Campaign</h3>
-            {/* exclamation is just a little trick to turn a string into its equivalent, in this case empty string equals false */}
-            <Form onSubmit={handleSubmit} error={!!errorMessage}>
+            <Form style={{ marginBottom: 15 }} onSubmit={handleSubmit} error={!!errorMessage}>
                 <Form.Field>
                     <label>Minimum Contribution</label>
                     <Input
@@ -76,9 +80,10 @@ const New = () => {
                         onChange={event => setMinimumContribution(event.target.value)} />
                 </Form.Field>
                 <Message error header="Opps!" content={errorMessage}></Message>
-                <Button type='submit' color="purple" loading={buttonSpinner}>Create</Button>
+                <Button type='submit' color="green" loading={buttonSpinner}>Create</Button>
             </Form>
-        </Layout>
+
+        </div>
     )
 }
 
