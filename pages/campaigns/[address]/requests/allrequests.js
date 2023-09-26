@@ -8,10 +8,9 @@ There is also a button for creating a new request which will redirect user to th
 import { React, useState, useEffect } from "react";
 import Layout from "../../../../components/Layout";
 import { Button, Icon, Table } from 'semantic-ui-react';
-import Link from 'next/link';
 import Campaign from "../../../../frontend_scripts/campaign";
 import RequestRow from "../../../../components/RequestRow";
-import NewRequests from "./new";
+import NewRequestForm from "../../../../components/NewRequestForm";
 
 const ShowRequests = ({ address, requestsCount, requests, numberOfContributors }) => {
 
@@ -85,31 +84,32 @@ const ShowRequests = ({ address, requestsCount, requests, numberOfContributors }
     // Render the main component
     return (
         <Layout>
-            <h3>Requests</h3>
-            <Table celled>
-                <Table.Header>
-                    <Table.Row>
-                        <Table.HeaderCell>ID</Table.HeaderCell>
-                        <Table.HeaderCell>Description</Table.HeaderCell>
-                        <Table.HeaderCell>Amount in ETH</Table.HeaderCell>
-                        <Table.HeaderCell>Recipient Address</Table.HeaderCell>
-                        <Table.HeaderCell>Number of Approvals</Table.HeaderCell>
-                        <Table.HeaderCell>Approve</Table.HeaderCell>
-                        <Table.HeaderCell>Finalize</Table.HeaderCell>
-                    </Table.Row>
-                </Table.Header>
-                <Table.Body>
-                    {displayRequests()}
-                </Table.Body>
-            </Table>
-            <div style={{ marginBottom: 15 }}>Displaying {showAll ? requestsCount : initialRequestCount} out of {requestsCount} requests.</div>
-            {/* Toggle between showing all requests and initial requests */}
-            <Button onClick={toggleShowAll}>
-                {showAll ? 'Show limited requests' : 'Show All Requests'}
-            </Button>
-            <br></br>
+            <div div style={{ display: showForm ? "none" : "" }}>
+                <h3>Requests</h3>
+                <Table celled>
+                    <Table.Header>
+                        <Table.Row>
+                            <Table.HeaderCell>ID</Table.HeaderCell>
+                            <Table.HeaderCell>Description</Table.HeaderCell>
+                            <Table.HeaderCell>Amount in ETH</Table.HeaderCell>
+                            <Table.HeaderCell>Recipient Address</Table.HeaderCell>
+                            <Table.HeaderCell>Number of Approvals</Table.HeaderCell>
+                            <Table.HeaderCell>Approve</Table.HeaderCell>
+                            <Table.HeaderCell>Finalize</Table.HeaderCell>
+                        </Table.Row>
+                    </Table.Header>
+                    <Table.Body>
+                        {displayRequests()}
+                    </Table.Body>
+                </Table>
+                <div style={{ marginBottom: 15 }}>Displaying {showAll ? requestsCount : initialRequestCount} out of {requestsCount} requests.</div>
+                {/* Toggle between showing all requests and initial requests */}
+                <Button onClick={toggleShowAll}>
+                    {showAll ? 'Show limited requests' : 'Show All Requests'}
+                </Button>
+            </div>
             {/* Display the form if showForm is true */}
-            {showForm && <NewRequests address={address} onFormSubmit={handleFormSubmit} />}
+            {showForm && <NewRequestForm address={address} onFormSubmit={handleFormSubmit} />}
             <br></br>
             <Button style={{ marginBottom: 15 }} floated="left" color={showForm ? "red" : "green"} onClick={toggleForm}>
                 {/* {showForm ? 'Cancel Request' : 'Create Request'} */}

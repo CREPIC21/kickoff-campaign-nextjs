@@ -14,7 +14,7 @@ import { ethers } from 'ethers';
 import { abi, contractAddress } from "../frontend_scripts/factory";
 import Link from 'next/link';
 import { useRouter } from "next/router";
-import New from "./campaigns/new";
+import NewCampaignForm from "../components/NewCampaignForm";
 
 export default function CampaingIndex({ campaigns }) {
 
@@ -58,20 +58,14 @@ export default function CampaingIndex({ campaigns }) {
     // Render the main component
     return (
         <Layout>
-            <div>
+            <div style={{ display: showForm ? "none" : "" }}>
                 <h3>Open campaings</h3>
-                {/* <Button floated="right" color={showForm ? "red" : "green"} onClick={toggleForm}>
-                <Button.Content>{showForm ? 'Cancel Request' : 'Create New Request'}</Button.Content>
-            </Button>
-            <br></br>
-            <br></br>
-            {showForm && <NewRequests address={address} onFormSubmit={handleFormSubmit} />} */}
                 {displayCampaigns()} {/* Render the Card.Group containing campaign cards */}
-                {showForm && <New onFormSubmit={handleFormSubmit} />}
-                <Button floated="left" color={showForm ? "red" : "green"} onClick={toggleForm}>
-                    <Button.Content>{showForm ? 'Close The Form' : 'Create New Campaign'}</Button.Content>
-                </Button>
             </div>
+            {showForm && <NewCampaignForm onFormSubmit={handleFormSubmit} />}
+            <Button floated="left" color={showForm ? "red" : "green"} onClick={toggleForm}>
+                <Button.Content>{showForm ? 'Close The Form' : 'Create New Campaign'}</Button.Content>
+            </Button>
         </Layout>
     );
 }

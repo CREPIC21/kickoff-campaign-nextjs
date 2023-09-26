@@ -11,16 +11,9 @@ const Header = () => {
     return (
         // Create a menu component using Semantic UI React
         <Menu style={{ marginTop: '10px' }}>
-            <Link href="/"><Menu.Item>Kickoff</Menu.Item></Link>
+            <Link href="/"><Menu.Item header>Kickoff Blockchain</Menu.Item></Link>
             <Menu.Menu position="right">
                 <Link href="/"><Menu.Item>Campaigns</Menu.Item></Link>
-                <Popup
-                    trigger={<Link href="/campaigns/new"><Menu.Item>+</Menu.Item></Link>}
-                    content="Create new campaign."
-                    on="hover"
-                    size="mini"
-                >
-                </Popup>
             </Menu.Menu>
         </Menu>
     )
