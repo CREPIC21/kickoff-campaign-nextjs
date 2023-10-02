@@ -74,7 +74,7 @@ export default function CampaingIndex({ campaigns }) {
 // https://nextjs.org/docs/pages/building-your-application/data-fetching/get-static-props
 export async function getStaticProps() {
     // Initialize an Ethereum provider using ethers, connecting to Infura
-    const provider = new ethers.providers.JsonRpcProvider("https://sepolia.infura.io/v3/f30d556feb8b4c0aa60df373daa4cefe");
+    const provider = new ethers.providers.JsonRpcProvider(process.env.NEXT_PUBLIC_SEPOLIA_RPC_URL_INFURA);
 
     // Create an instance of your contract using its ABI and contract address
     const contract = new ethers.Contract(contractAddress, abi, provider);

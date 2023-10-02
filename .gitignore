@@ -8,6 +8,7 @@
 
 # local env files
 .env
+.env.local
 
 # some files
 commands.md

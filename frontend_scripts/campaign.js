@@ -1,10 +1,10 @@
 import { ethers } from 'ethers';
-const dotenv = require('dotenv');
+// const dotenv = require('dotenv');
 
 // Specify the path to your .env file
-const envFilePath = '../.env';
+// const envFilePath = '../.env';
 // Load environment variables from the custom path
-dotenv.config({ path: envFilePath });
+// dotenv.config({ path: envFilePath });
 
 const abi = [
     {
@@ -45,6 +45,11 @@ const abi = [
     },
     {
         "inputs": [],
+        "name": "Campaign__ManagerCanNotBeRequestRecipient",
+        "type": "error"
+    },
+    {
+        "inputs": [],
         "name": "Campaign__ManagerDidNotCallThisFunction",
         "type": "error"
     },
@@ -72,6 +77,82 @@ const abi = [
         "inputs": [],
         "name": "Campaign__RequestWasAlreadyFinalized",
         "type": "error"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "internalType": "address",
+                "name": "contributor",
+                "type": "address"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "amount",
+                "type": "uint256"
+            }
+        ],
+        "name": "Contribution",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "internalType": "uint256",
+                "name": "requestId",
+                "type": "uint256"
+            },
+            {
+                "indexed": false,
+                "internalType": "address",
+                "name": "approver",
+                "type": "address"
+            }
+        ],
+        "name": "RequestApproved",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "internalType": "uint256",
+                "name": "requestId",
+                "type": "uint256"
+            }
+        ],
+        "name": "RequestCreated",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "internalType": "uint256",
+                "name": "requestId",
+                "type": "uint256"
+            },
+            {
+                "indexed": true,
+                "internalType": "address",
+                "name": "recipient",
+                "type": "address"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "value",
+                "type": "uint256"
+            }
+        ],
+        "name": "RequestFinalized",
+        "type": "event"
     },
     {
         "inputs": [
@@ -315,7 +396,7 @@ export default (address, signer = null) => {
     let contract;
     if (signer == null) {
         // Initialize an Ethereum provider using ethers, connecting to Infura
-        const provider = new ethers.providers.JsonRpcProvider(process.env.SEPOLIA_RPC_URL_INFURA);
+        const provider = new ethers.providers.JsonRpcProvider(process.env.NEXT_PUBLIC_SEPOLIA_RPC_URL_INFURA);
         // Create an instance of your contract using its ABI and contract address
         contract = new ethers.Contract(address, abi, provider);
     } else {

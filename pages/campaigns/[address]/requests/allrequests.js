@@ -40,6 +40,7 @@ const ShowRequests = ({ address, requestsCount, requests, numberOfContributors }
     // Function to display requests in a table on the UI
     function displayRequests() {
         if (showAll) {
+            console.log(requests);
             // Display all requests
             return requests.map((request, index) => (
                 <RequestRow
@@ -53,6 +54,7 @@ const ShowRequests = ({ address, requestsCount, requests, numberOfContributors }
         } else {
             // Limit the number of requests to display based on initialRequestCount
             const displayedRequests = requests.slice(0, initialRequestCount);
+            console.log(displayRequests);
 
             // Looping through the campaigns array to create request rows
             return displayedRequests.map((request, index) => {
