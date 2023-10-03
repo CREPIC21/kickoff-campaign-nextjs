@@ -1,15 +1,16 @@
 /*
 This React component is for creating a new campaign contract. It uses the Semantic UI React library for styling and interacts with an Ethereum smart contract. 
 Users can input the minimum contribution required to create a campaign, and when they submit the form, a transaction is sent to the Ethereum network to create a new campaign contract. 
+The new campaign contract is also programmatically verified and published on blockchain network.
 The code also includes error handling and a loading spinner to provide feedback to the user during the contract creation process.
 */
 
 // Import necessary modules and components
-// require('dotenv').config()
 import { React, useState } from "react";
 import { Button, Form, Input, Message } from 'semantic-ui-react';
 import { ethers } from 'ethers';
 import { abi, contractAddress } from "../frontend_scripts/factory";
+import Campaign from "../frontend_scripts/campaign";
 import { useRouter } from "next/router";
 import { soliditySourceCode } from "../frontend_scripts/campaignSourceCode";
 
@@ -32,19 +33,19 @@ async function getFactoryDeployedCampaigns() {
 }
 
 // Function to verify a contract on Etherscan
-async function verifyContractOnEtherscan(contractAddress, provider) {
+async function verifyContractOnEtherscan(campaignConstructorArguments, campaignAddress, provider) {
     const data = {
         apikey: process.env.NEXT_PUBLIC_ETHERSCAN_API_KEY,
         module: 'contract',
         action: 'verifysourcecode',
-        contractaddress: contractAddress,
+        contractaddress: campaignAddress,
         sourceCode: soliditySourceCode,
         codeformat: 'solidity-single-file',
         contractname: 'Campaign',
         compilerversion: 'v0.8.19+commit.7dd6d404',
         optimizationUsed: 1,
         runs: 200,
-        constructorArguements: "000000000000000000000000000000000000000000000000000000000000000a000000000000000000000000c510cf29e462715309d9665e5506f493e48d90e0"
+        constructorArguements: campaignConstructorArguments
     }
 
     // Make a POST request using fetch
@@ -95,14 +96,22 @@ const New = ({ onFormSubmit }) => {
             const transactionResponse = await contract.createCampaignContract(minimumContribution);
 
             // Listen for the transaction to be mined and resolved
-            await listenForTransactionMine(transactionResponse, provider)
+            await listenForTransactionMine(transactionResponse, provider);
 
             // Fetch the contract address from the blockchain
             const campaignAddress = await getFactoryDeployedCampaigns();
-            // console.log("ADDRESS: ", campaignAddress);
+            const campaign = Campaign(campaignAddress, signer); // Create an instance of the campaign contract
+            const campaignManager = await campaign.getManager(); // Call the contract method to get campaign manager
+            console.log("ADDRESS: ", campaignAddress);
+            // Define the types and values you want to encode
+            const types = ["uint256", "address"];
+            const values = [Number(minimumContribution), campaignManager];
+            // Encode the values using ethers.abiCoder.encode
+            let encodedCampaignConstructorArguments = ethers.utils.defaultAbiCoder.encode(types, values);
+            let encodedCampaignConstructorArgumentsWithout0x = encodedCampaignConstructorArguments.slice(2);
 
             // Verify the contract on Etherscan after deployment
-            await verifyContractOnEtherscan(campaignAddress, provider);
+            await verifyContractOnEtherscan(encodedCampaignConstructorArgumentsWithout0x, campaignAddress, provider);
 
             // Notify the parent component (ShowRequests) that the form is successfully submitted
             onFormSubmit(true);
